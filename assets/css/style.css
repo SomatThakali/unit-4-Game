@@ -1,0 +1,19 @@
+body{
+    font-family: Catamaran;
+}
+
+.starwarHeading{
+    font-family: 'Fredericka the Great', cursive;
+}
+
+button:hover{
+    background-color: red;
+}
+
+.characters{
+    
+    height: 150px;
+    width: 150px;;
+
+
+}
