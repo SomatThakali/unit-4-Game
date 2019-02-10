@@ -41,8 +41,8 @@ var characters = {
 
 // console.log(characters.somat.attackPower);
 
-var yourCharacter;
-var enemy;
+var yourCharacter; // This var is the player
+var enemies = []; // an array that store enemies 
 
 
 // This functions will create the contents of each characters
@@ -52,26 +52,56 @@ var enemy;
 // image and the health
 function createContent(character, contentArea){
     var characterDiv = $("<div class ='character' data-name='" + character.name + "'>");
-    var characterName = $("<div class ='character-name>").html(character.name)
-    var characterImage = $("<img class = 'character-image'").attr("src", character.imageUrl);
-    var characterHealth = $("<div class = 'character-health>").html(character.health);
+    var characterName = $("<div class ='character-name>").text(character.name)
+    var characterImage = $("<img class = 'character-image'>").attr("src", character.imageUrl);
+    var characterHealth = $("<div class = 'character-health>").text(character.healthPoints);
 
-    characterDiv.append(characterName).append(characterImage).append(characterHealth);
+    $(characterDiv).append(characterName).append(characterHealth).append(characterImage);
     $(contentArea).append(characterDiv);
 }
 
-
+// will display all the images
 function startGame(){
     for (var key in characters) {
         createContent(characters[key], "#characters");
       }
     };
   
-
-
-
-
-
-
 startGame();
+
+  // this function will move all the non-slected characters inside a a div woth an if "enemies-available"
+  function enemiesContent(enemyArray) {
+    for (var i = 0; i < enemyArray.length; i++) {
+      createContent(enemyArray[i], "#enemies-availabe");
+    }
+  };
+
+
+// Now we have to choose our character by clickling the image 
+$(".character").click( function(){
+    // This var will save the character's name
+    var name = $(this).attr("data-name");
+
+   // If the player didn't choose the character
+    if (!yourCharacter) { 
+      
+     yourCharacter = characters[name];
+      
+      for (var key in characters) {
+        if (key !== name) {
+          enemies.push(characters[key]); // Push all the non-selected characters to eenies array
+        }
+      }
+
+      // Hide the character select div.
+    //   $("#characters").style.cssText= "display: none";
+    $("#characters").hide();
+    
+    // update the your-Character div
+    $("#your-Character").empty(); // Empty the area to re-store the new object
+      createContent(yourCharacter, "#your-character"); // This div will hold your character
+      enemiesContent(enemies); // hold all the non-selected characters
+    }
+
+ });
 });
