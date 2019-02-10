@@ -34,7 +34,7 @@ var characters = {
         healthPoints : 150,
         attackPower: 5,
         CounterAttackPower: 25,
-        imageUrl: "assets/images/3.jpg"
+        imageUrl: "assets/images/4.jpg"
     }
       
 }; // end of the object
@@ -118,8 +118,75 @@ $("#characters").on("click", ".character", function(){
     if($("#defender").contents().length === 0){ 
     enemy = characters[name];
     createContent(enemy, "#defender");
-    $(this).remove();
+    $(this).remove(); // this will clear the defeted enemy
     }
+ });
+
+function clearMessage() {
+    var gameMessage = $("#gameMessage");
+
+    gameMessage.text("");
+}
+
+var turn = 1; // This will track the turns during the attack
+var kill = 0; // This will track the nubmer of defeted enemies
+  // click event for the attack button
+ $("#attack-button").on("click", function() {
+
+ if($("#defender").children().length != 0){
+    var attackText = "You attacked " + enemy.name + " for " + yourCharacter.attackPower * turn + " damage.";
+    console.log('DEBUG '+ attackText);
+    var gotAttack =  enemy.name + " attacked you back for  " + enemy.attackPower * turn + " damage.";
+    console.log('DEBUG '+ gotAttack);
+    clearMessage();
+        
+    enemy.healthPoints -= yourCharacter.attackPower * turn;
+
+    if (enemy.healthPoints > 0) {
+        $("#defender").empty(); // Empty the area to re-store the new object
+        createContent(enemy, "#defender"); // This div will hold enemy 
+
+        $('#attackedText').text(attackText);
+        $('#gotAttack').text(gotAttack);
+
+        enemy.healthPoints -= enemy.CounterAttackPower;
+
+        $("#your-character").empty(); // Empty the area to re-store the new object
+        createContent(yourCharacter, "#your-character"); // This div will hold enemy 
+        
+        if (yourCharacter.healthPoints <= 0) {
+            clearMessage();
+            var restart = $("<button>Restart</button>").click(function() {
+            location.reload();
+        });
+        $("#attack-button").off("click");
+        }
+    }
+    else{
+        $("#defender").empty();
+        var message = "You have defeated " + enemy.name + ", you can choose to fight another enemy.";
+        $('#gameMessage').text(message);
+
+        // Increment your kill count.
+        kill++;
+
+        if (kill >= enemies.length) {
+            clearMessage();
+        $("#attack-button").off("click");
+        var gameOvermessage = "You Won!!!! GAME OVER!!!";
+        $('#gameMessage').text(gameOvermessage);
+        }   
+    }
+    turn++;
+    }
+
+    else{
+        clearMessage();
+    }
+
+ 
+
+     
  });
 
 });

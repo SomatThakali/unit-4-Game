@@ -21,3 +21,11 @@ button:hover{
 .character{
     display: inline-block;
 }
+
+.character-name {
+    text-align: center;
+  }
+  
+  .character-health {
+    text-align: center;
+  }
