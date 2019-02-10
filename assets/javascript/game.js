@@ -43,6 +43,7 @@ var characters = {
 
 var yourCharacter; // This var is the player
 var enemies = []; // an array that store enemies 
+var enemy;
 
 
 // This functions will create the contents of each characters
@@ -77,8 +78,10 @@ startGame();
   };
 
 
-// Now we have to choose our character by clickling the image 
-$(".character").click( function(){
+// Now we have to choose our character by clickling any image
+// The selected image should stored only in #character div  not on the #enemy-section div, that means,
+// the click event will be appllied to #character div and the .character class
+$("#characters").on("click", ".character", function(){
     // This var will save the character's name
     var name = $(this).attr("data-name");
 
@@ -103,5 +106,20 @@ $(".character").click( function(){
       enemiesContent(enemies); // hold all the non-selected characters
     }
 
+   
+
  });
+
+ // click event for the enemies
+ $("#enemies-availabe").on("click", ".character", function(){
+    var name = $(this).attr("data-name");
+    //if the #defender div is empty then insert one enemy character. we cannot enter two charater 
+    // because, onvce we selected one character then the #defender div will no more be empty
+    if($("#defender").contents().length === 0){ 
+    enemy = characters[name];
+    createContent(enemy, "#defender");
+    $(this).remove();
+    }
+ });
+
 });
