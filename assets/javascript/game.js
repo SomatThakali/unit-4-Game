@@ -126,8 +126,9 @@ function clearMessage() {
     $('#attackText').text("");
     $('#gotAttack').text("");
 }
+
+// This will restart the game when the user click reset
  function reset(resultMessage) {
-    // When the 'Restart' button is clicked, reload the page.
      var restart = $("<button>Restart</button>").click(function() {
       location.reload();
     });
@@ -185,7 +186,8 @@ var kill = 0; // This will track the nubmer of defeted enemies
         $("#defender").empty();
         clearMessage();
         var message = "You have defeated " + enemy.name + ", you can choose to fight another enemy.";
-        $('#gameMessage').text(message);
+        // replace the #attckedText with this message
+        $('#attackedText').text(message);
        
 
         // Increment your kill count.
