@@ -65,17 +65,17 @@ function createContent(character, contentArea){
 function startGame(){
     for (var key in characters) {
         createContent(characters[key], "#characters");
-      }
-    };
+    }
+};
   
 startGame();
 
-  // this function will move all the non-slected characters inside a a div woth an if "enemies-available"
-  function enemiesContent(enemyArray) {
+// this function will move all the non-slected characters inside a a div woth an if "enemies-available"
+function enemiesContent(enemyArray) {
     for (var i = 0; i < enemyArray.length; i++) {
-      createContent(enemyArray[i], "#enemies-availabe");
+        createContent(enemyArray[i], "#enemies-availabe");
     }
-  };
+};
 
 
 // Now we have to choose our character by clickling any image
@@ -96,7 +96,7 @@ $("#characters").on("click", ".character", function(){
         }
       }
 
-      // Hide the character select div.
+    // Hide the character select div.
     //   $("#characters").style.cssText= "display: none";
     $("#characters").hide();
     
@@ -104,10 +104,7 @@ $("#characters").on("click", ".character", function(){
     $("#your-Character").empty(); // Empty the area to re-store the new object
       createContent(yourCharacter, "#your-character"); // This div will hold your character
       enemiesContent(enemies); // hold all the non-selected characters
-    }
-
-   
-
+    } // end of if statement  
  });
 
  // click event for the enemies
@@ -122,6 +119,7 @@ $("#characters").on("click", ".character", function(){
     }
  });
 
+// This function will replace the content/text with empty strings
 function clearMessage() {
     $('#attackText').text("");
     $('#gotAttack').text("");
@@ -142,68 +140,62 @@ var kill = 0; // This will track the nubmer of defeted enemies
   // click event for the attack button
  $("#attack-button").on("click", function() {
 
- if($("#defender").children().length != 0){
     var attackText = "You attacked " + enemy.name + " for " + yourCharacter.attackPower * turn + " damage.";
     console.log('DEBUG '+ attackText);
     var gotAttack =  enemy.name + " attacked you back for  " + enemy.attackPower * turn + " damage.";
     console.log('DEBUG '+ gotAttack);
-    clearMessage();
 
-    calculateWinLoss();
-    turn++;
-    }
+    // if the defender section is not empty. OR after the palyer chose  the defender
+    if($("#defender").children().length != 0){  
+        clearMessage();      
+        enemy.healthPoints -= yourCharacter.attackPower * turn;
+        if (enemy.healthPoints > 0) {
+            $("#defender").empty(); // Empty the area to re-store the new object
+            createContent(enemy, "#defender"); // This div will hold enemy 
 
-    else{
-        clearMessage();
-    }
+            $('#attackedText').text(attackText);
+            $('#gotAttack').text(gotAttack);
+            yourCharacter.healthPoints -= enemy.CounterAttackPower*turn;
 
- 
-
- function calculateWinLoss(){
-
-     enemy.healthPoints -= yourCharacter.attackPower * turn;
-     if (enemy.healthPoints > 0) {
-        $("#defender").empty(); // Empty the area to re-store the new object
-        createContent(enemy, "#defender"); // This div will hold enemy 
-
-        $('#attackedText').text(attackText);
-        $('#gotAttack').text(gotAttack);
-        yourCharacter.healthPoints -= enemy.CounterAttackPower*turn;
-
-        $("#your-character").empty(); // Empty the area to re-store the new object
-        createContent(yourCharacter, "#your-character"); // This div will hold enemy 
-        
-        if (yourCharacter.healthPoints <= 0) {
-            clearMessage();
-        //     var restart = $("<button>Restart</button>").click(function() {
-        //     location.reload();
-        // });
-        reset('You Loose')
-        $("#attack-button").off("click");
+            $("#your-character").empty(); // Empty the area to re-store the new object
+            createContent(yourCharacter, "#your-character"); // This div will hold enemy 
+            
+            if (yourCharacter.healthPoints <= 0) {
+                clearMessage();
+            //     var restart = $("<button>Restart</button>").click(function() {
+            //     location.reload();
+            // });
+            reset('You Loose')
+            $("#attack-button").off("click");
+            $('#attackedText').empty(); // makes the div empty
+            }
         }
-    }
+        else{
+            $("#defender").empty();
+            clearMessage();
+            var message = "You have defeated " + enemy.name + ", you can choose to fight another enemy.";
+            // replace the #attckedText with this message
+            $('#attackedText').text(message);
+            // Increment your kill count.
+            kill++;
+            
+            if (kill >= enemies.length) {
+            clearMessage();
+            $("#attack-button").off("click");
+            reset("You Won!!!! GAME OVER!!!");
+             $('#attackedText').empty();
+            // var gameOvermessage = "You Won!!!! GAME OVER!!!";
+            // $('#gameMessage').text(gameOvermessage);
+            }   
+        }
+            turn++;
+        }
+
     else{
-        $("#defender").empty();
         clearMessage();
-        var message = "You have defeated " + enemy.name + ", you can choose to fight another enemy.";
-        // replace the #attckedText with this message
-        $('#attackedText').text(message);
-       
-
-        // Increment your kill count.
-        kill++;
-
-        if (kill >= enemies.length) {
-        clearMessage();
-        $("#attack-button").off("click");
-        reset("You Won!!!! GAME OVER!!!");
-        // var gameOvermessage = "You Won!!!! GAME OVER!!!";
-        // $('#gameMessage').text(gameOvermessage);
-        }   
     }
- }
 
      
- });
+ }); 
 
 });
