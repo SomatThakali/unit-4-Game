@@ -7,8 +7,8 @@ var characters = {
     somat:{
         name: 'somat',
         healthPoints : 120,
-        attackPower: 6,
-        CounterAttackPower: 20,
+        attackPower: 25,
+        CounterAttackPower: 2,
         imageUrl: "/assets/images/1.jpg"
     },
 
@@ -147,10 +147,21 @@ var kill = 0; // This will track the nubmer of defeted enemies
     var gotAttack =  enemy.name + " attacked you back for  " + enemy.attackPower * turn + " damage.";
     console.log('DEBUG '+ gotAttack);
     clearMessage();
-        
-    enemy.healthPoints -= yourCharacter.attackPower * turn;
 
-    if (enemy.healthPoints > 0) {
+    calculateWinLoss();
+    turn++;
+    }
+
+    else{
+        clearMessage();
+    }
+
+ 
+
+ function calculateWinLoss(){
+
+     enemy.healthPoints -= yourCharacter.attackPower * turn;
+     if (enemy.healthPoints > 0) {
         $("#defender").empty(); // Empty the area to re-store the new object
         createContent(enemy, "#defender"); // This div will hold enemy 
 
@@ -172,9 +183,10 @@ var kill = 0; // This will track the nubmer of defeted enemies
     }
     else{
         $("#defender").empty();
+        clearMessage();
         var message = "You have defeated " + enemy.name + ", you can choose to fight another enemy.";
         $('#gameMessage').text(message);
-        clearMessage();
+       
 
         // Increment your kill count.
         kill++;
@@ -187,14 +199,7 @@ var kill = 0; // This will track the nubmer of defeted enemies
         // $('#gameMessage').text(gameOvermessage);
         }   
     }
-    turn++;
-    }
-
-    else{
-        clearMessage();
-    }
-
- 
+ }
 
      
  });
