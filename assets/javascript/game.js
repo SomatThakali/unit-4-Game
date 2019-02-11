@@ -53,11 +53,11 @@ var enemy;
 // image and the health
 function createContent(character, contentArea){
     var characterDiv = $("<div class ='character' data-name='" + character.name + "'>");
-    var characterName = $("<div class ='character-name>").text(character.name)
+    var characterName = $("<div class ='character-name'>").text(character.name)
     var characterImage = $("<img class = 'character-image'>").attr("src", character.imageUrl);
-    var characterHealth = $("<div class = 'character-health>").text(character.healthPoints);
+    var characterHealth = $("<div class = 'character-health'>").text(character.healthPoints);
 
-    $(characterDiv).append(characterName).append(characterHealth).append(characterImage);
+    $(characterDiv).append(characterName).append(characterImage).append(characterHealth);
     $(contentArea).append(characterDiv);
 }
 
@@ -123,10 +123,18 @@ $("#characters").on("click", ".character", function(){
  });
 
 function clearMessage() {
-    var gameMessage = $("#gameMessage");
-
-    gameMessage.text("");
+    $('#attackText').text("");
+    $('#gotAttack').text("");
 }
+ function reset(resultMessage) {
+    // When the 'Restart' button is clicked, reload the page.
+     var restart = $("<button>Restart</button>").click(function() {
+      location.reload();
+    });
+    $('#restart').append(restart);
+    $('#win-loss-message').text(resultMessage)
+ }
+
 
 var turn = 1; // This will track the turns during the attack
 var kill = 0; // This will track the nubmer of defeted enemies
@@ -148,17 +156,17 @@ var kill = 0; // This will track the nubmer of defeted enemies
 
         $('#attackedText').text(attackText);
         $('#gotAttack').text(gotAttack);
-
-        enemy.healthPoints -= enemy.CounterAttackPower;
+        yourCharacter.healthPoints -= enemy.CounterAttackPower*turn;
 
         $("#your-character").empty(); // Empty the area to re-store the new object
         createContent(yourCharacter, "#your-character"); // This div will hold enemy 
         
         if (yourCharacter.healthPoints <= 0) {
             clearMessage();
-            var restart = $("<button>Restart</button>").click(function() {
-            location.reload();
-        });
+        //     var restart = $("<button>Restart</button>").click(function() {
+        //     location.reload();
+        // });
+        reset('You Loose')
         $("#attack-button").off("click");
         }
     }
@@ -166,15 +174,17 @@ var kill = 0; // This will track the nubmer of defeted enemies
         $("#defender").empty();
         var message = "You have defeated " + enemy.name + ", you can choose to fight another enemy.";
         $('#gameMessage').text(message);
+        clearMessage();
 
         // Increment your kill count.
         kill++;
 
         if (kill >= enemies.length) {
-            clearMessage();
+        clearMessage();
         $("#attack-button").off("click");
-        var gameOvermessage = "You Won!!!! GAME OVER!!!";
-        $('#gameMessage').text(gameOvermessage);
+        reset("You Won!!!! GAME OVER!!!");
+        // var gameOvermessage = "You Won!!!! GAME OVER!!!";
+        // $('#gameMessage').text(gameOvermessage);
         }   
     }
     turn++;
