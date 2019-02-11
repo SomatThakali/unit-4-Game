@@ -9,7 +9,7 @@ var characters = {
         healthPoints : 120,
         attackPower: 25,
         CounterAttackPower: 2,
-        imageUrl: "/assets/images/1.jpg"
+        imageUrl: "assets/images/1.jpg"
     },
 
     michael:{
